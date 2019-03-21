@@ -82,8 +82,9 @@ export default class InputToolbar extends React.Component {
   }
 
   render() {
+    const {text} = this.props;
     return (
-      <View style={[styles.container, this.props.containerStyle, { position: this.state.position }]}>
+      <View style={[styles.container, this.props.containerStyle, { position: this.state.position}, {borderColor: text.trim().length > 0 ? '#9800E8': '#908590'}]}>
         <View style={[styles.primary, this.props.primaryStyle]}>
           {this.renderActions()}
           {this.renderComposer()}
@@ -98,12 +99,18 @@ export default class InputToolbar extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
-    borderTopWidth: StyleSheet.hairlineWidth,
-    borderTopColor: Color.defaultColor,
     backgroundColor: Color.white,
     bottom: 0,
     left: 0,
     right: 0,
+    backgroundColor: 'white',
+    width: 327,
+    borderWidth: 1,
+    borderRadius: 25,
+    borderColor: 'rgba(144, 133, 144, 1)',
+    marginLeft: 24,
+    paddingLeft: 12,
+    paddingRight: 10,
   },
   primary: {
     flexDirection: 'row',

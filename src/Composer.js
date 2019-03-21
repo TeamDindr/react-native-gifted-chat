@@ -2,54 +2,65 @@
 
 import PropTypes from 'prop-types';
 import React from 'react';
-import { Platform, StyleSheet, TextInput } from 'react-native';
+import {Platform, StyleSheet, TextInput} from 'react-native';
 
-import { MIN_COMPOSER_HEIGHT, DEFAULT_PLACEHOLDER } from './Constant';
+import {MIN_COMPOSER_HEIGHT, DEFAULT_PLACEHOLDER} from './Constant';
 import Color from './Color';
 
 export default class Composer extends React.Component {
 
   onContentSizeChange(e) {
-    const { contentSize } = e.nativeEvent;
+    const {contentSize} = e.nativeEvent;
 
     // Support earlier versions of React Native on Android.
-    if (!contentSize) return;
-
-    if (
-      !this.contentSize ||
-      this.contentSize.width !== contentSize.width ||
-      this.contentSize.height !== contentSize.height
-    ) {
+    if (!contentSize) 
+      return;
+    
+    if (!this.contentSize || this.contentSize.width !== contentSize.width || this.contentSize.height !== contentSize.height) {
       this.contentSize = contentSize;
-      this.props.onInputSizeChanged(this.contentSize);
+      this
+        .props
+        .onInputSizeChanged(this.contentSize);
     }
   }
 
   onChangeText(text) {
-    this.props.onTextChanged(text);
+    this
+      .props
+      .onTextChanged(text);
   }
 
   render() {
-    return (
-      <TextInput
-        testID={this.props.placeholder}
-        accessible
-        accessibilityLabel={this.props.placeholder}
-        placeholder={this.props.placeholder}
-        placeholderTextColor={this.props.placeholderTextColor}
-        multiline={this.props.multiline}
-        onChange={(e) => this.onContentSizeChange(e)}
-        onContentSizeChange={(e) => this.onContentSizeChange(e)}
-        onChangeText={(text) => this.onChangeText(text)}
-        style={[styles.textInput, this.props.textInputStyle, { height: this.props.composerHeight }]}
-        autoFocus={this.props.textInputAutoFocus}
-        value={this.props.text}
-        enablesReturnKeyAutomatically
-        underlineColorAndroid="transparent"
-        keyboardAppearance={this.props.keyboardAppearance}
-        {...this.props.textInputProps}
-      />
-    );
+    const {text} = this.props;
+    const isInputActive = text
+      .trim()
+      .length > 0;
+
+    return (<TextInput
+      testID={this.props.placeholder}
+      accessible
+      accessibilityLabel={this.props.placeholder}
+      placeholder={this.props.placeholder}
+      placeholderTextColor={this.props.placeholderTextColor}
+      multiline={true}
+      onChange={(e) => this.onContentSizeChange(e)}
+      onContentSizeChange={(e) => this.onContentSizeChange(e)}
+      onChangeText={(text) => this.onChangeText(text)}
+      style={[
+      styles.textInput,
+      this.props.textInputStyle, {
+        height: this.props.composerHeight,
+      }
+    ]}
+      autoFocus={this.props.textInputAutoFocus}
+      value={this.props.text}
+      enablesReturnKeyAutomatically
+      underlineColorAndroid="transparent"
+      keyboardAppearance={this.props.keyboardAppearance}
+      {...this.props.textInputProps}
+      selectionColor={isInputActive
+      ? '#9800E8'
+      : '#908590'}/>);
   }
 
 }
@@ -58,17 +69,14 @@ const styles = StyleSheet.create({
   textInput: {
     flex: 1,
     marginLeft: 10,
-    fontSize: 16,
-    lineHeight: 16,
-    marginTop: Platform.select({
-      ios: 6,
-      android: 0,
-    }),
-    marginBottom: Platform.select({
-      ios: 5,
-      android: 3,
-    }),
-  },
+    lineHeight: 0,
+    marginTop: Platform.select({ios: 8, android: 0}),
+    marginBottom: Platform.select({ios: 6, android: 3}),
+    fontFamily: 'GothamRounded-Book',
+    fontSize: 14,
+    backgroundColor: 'white',
+    paddingTop: 8
+  }
 });
 
 Composer.defaultProps = {
@@ -82,7 +90,7 @@ Composer.defaultProps = {
   textInputAutoFocus: false,
   keyboardAppearance: 'default',
   onTextChanged: () => {},
-  onInputSizeChanged: () => {},
+  onInputSizeChanged: () => {}
 };
 
 Composer.propTypes = {
@@ -96,5 +104,5 @@ Composer.propTypes = {
   multiline: PropTypes.bool,
   textInputStyle: TextInput.propTypes.style,
   textInputAutoFocus: PropTypes.bool,
-  keyboardAppearance: PropTypes.string,
+  keyboardAppearance: PropTypes.string
 };
